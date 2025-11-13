@@ -1,21 +1,14 @@
-from app.models import User
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
-from sqlalchemy.orm import Session
 
 from .. import models, schemas
-from ..config import settings
-from ..database import get_db
+from ..database import db_dependency, get_db
 from ..utils.auth_utils import create_access_token, hash_password, verify_password
+from ..utils.depndencies import require_admin
 
 router = APIRouter(
     prefix="/api/v1/auth",
     tags=["Auth"],
 )
-
-# OAuth2 scheme for extracting Bearer token
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 # =====================================================
@@ -31,11 +24,13 @@ def register_user(model: schemas.UserCreate, db=Depends(get_db)):
 
     hashed_pw = hash_password(model.password)
 
+    user_count = db.query(models.User).count()
+
     new_user = models.User(
         username=model.username,
         email=model.email,
         password_hash=hashed_pw,
-        role="non-Admin",
+        role="admin" if user_count == 0 else "user",
     )
 
     db.add(new_user)
@@ -63,24 +58,26 @@ def login_user(model: schemas.UserLogin, db=Depends(get_db)):
 
 
 # =====================================================
-# GET CURRENT USER (Protected route helper)
+# Protected route helpers
 # =====================================================
-def get_current_user(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
-):
-    try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
-        )
-        username: str | None = payload.get("sub")
 
-        if username is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
 
-    user = db.query(User).filter(User.username == username).first()
+@router.patch("/role/{user_id}", dependencies=[Depends(require_admin)])
+def RoleUpdate(user_id: int, payload: schemas.RoleUpdate, db: db_dependency):
+    new_role = payload.new_role.lower()
+
+    allowed_roles = {"admin", "user", "non-admin"}
+
+    if new_role not in allowed_roles:
+        raise HTTPException(status_code=400, detail="invalid role")
+
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+
+    user.role = new_role  # type: ignore
+    db.commit()
+    db.refresh(user)
 
     return user

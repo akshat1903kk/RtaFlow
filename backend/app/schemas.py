@@ -29,6 +29,10 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 
+class RoleUpdate(BaseModel):
+    new_role: str
+
+
 # =====================================================
 #  TASK SCHEMAS
 # =====================================================
