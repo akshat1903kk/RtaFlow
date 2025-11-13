@@ -5,9 +5,9 @@ client = c
 
 def test_register(client):
     data = {
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "test12345",
+        "username": "testuserq",
+        "email": "testq@example.com",
+        "password": "testq12345",
     }
 
     response = client.post("/api/v1/auth/register", json=data)
@@ -15,15 +15,30 @@ def test_register(client):
     assert response.status_code == 201
     body = response.json()
 
+    # UserResponse returns ONLY: id, username, email, role, created_at
     assert "id" in body
-    assert body["username"] == "testuser"
-    assert body["email"] == "test@example.com"
+    assert body["username"] == "testuserq"
+    assert body["email"] == "testq@example.com"
+    assert body["role"] == "non-Admin"
+    assert "created_at" in body
 
 
 def test_login(client):
-    data = {"username": "testuser", "password": "test12345"}
+    # First register
+    client.post(
+        "/api/v1/auth/register",
+        json={
+            "username": "testuserw",
+            "email": "testw@example.com",
+            "password": "test12345",
+        },
+    )
 
-    response = client.post("/api/v1/auth/login", json=data)
+    # Then login
+    response = client.post(
+        "/api/v1/auth/login",
+        json={"username": "testuserw", "password": "test12345"},
+    )
 
     assert response.status_code == 200
     body = response.json()

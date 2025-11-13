@@ -18,11 +18,11 @@ class UserLogin(BaseModel):
     password: str
 
 
-class User(BaseModel):
+class UserResponse(BaseModel):
     id: int
     username: str
-    role: str
     email: str
+    role: str
     created_at: datetime
 
     class Config:
