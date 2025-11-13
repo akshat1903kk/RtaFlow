@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from .database import Base, engine
-from .routers import journal, tasks
+from .routers import auth, journal, tasks
 
 app = FastAPI(title="RtaFlow")
 
@@ -18,3 +18,4 @@ def health_check():
 
 app.include_router(tasks.router)
 app.include_router(journal.router)
+app.include_router(auth.router)
