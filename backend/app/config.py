@@ -13,9 +13,10 @@ class Settings(BaseSettings):
     DB_NAME: str = "rtaflow.db"
     DATABASE_URL: str = f"sqlite:///{BASE_DIR / 'data' / DB_NAME}"
 
-    # Security (for JWT, later)
+    # Security
     SECRET_KEY: str = "change_me_later"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    ALGORITHM: str = "HS256"  # ← added this (your auth.py was using settings.algo)
 
     class Config:
         env_file = BASE_DIR / ".env"

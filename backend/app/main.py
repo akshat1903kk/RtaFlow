@@ -11,5 +11,10 @@ def startup():
     Base.metadata.create_all(bind=engine)
 
 
+@app.get("/")
+def health_check():
+    return {"status": "healthy", "app": "RtaFlow", "test api at": "/docs"}
+
+
 app.include_router(tasks.router)
 app.include_router(journal.router)

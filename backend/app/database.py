@@ -1,11 +1,22 @@
+import logging
 from pathlib import Path
 from typing import Annotated
+from venv import logger
 
 from fastapi import Depends
 from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from .config import settings
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] %(levelname)s in %(module)s: %(message)s]",
+    handlers=[logging.StreamHandler()],
+)
+logger = logging.getLogger(settings.APP_NAME)
+
 
 # Make sure the /data directory exists
 db_path = Path(settings.DATABASE_URL.replace("sqlite:///", "")).parent
@@ -21,7 +32,7 @@ class Base(DeclarativeBase):
 engine = create_engine(
     settings.DATABASE_URL,
     connect_args={"check_same_thread": False},  # SQLite threading quirk
-    echo=False,  # Set to True if you want query logs
+    echo=False,
     future=True,
 )
 
@@ -34,6 +45,10 @@ def get_db():
     db = SessionLocal()
     try:
         yield db
+        db.commit()
+    except SQLAlchemyError as e:
+        db.rollback()
+        logger.error(f"Database transction Failed : {e}")
     finally:
         db.close()
 
