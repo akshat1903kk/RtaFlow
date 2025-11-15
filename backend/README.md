@@ -1,104 +1,206 @@
-RtaFlow Backend
+# ṚtaFlow
 
-This directory contains the backend server for ṚtaFlow, a privacy-first journaling and task management app.
+> *"Order, rhythm, and focus — aligned with Ṛta."*
 
-The server is built using FastAPI and uses SQLite as its database, ensuring that all data remains local and private to the user.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
 
-✨ Features
+ṚtaFlow is an open-source, privacy-first journaling and task management application designed to run locally with optional cloud sync. Built with a focus on minimalism, performance, and user privacy, ṚtaFlow provides a seamless experience for organizing your thoughts and tasks.
 
-FastAPI: A modern, high-performance Python web framework for building APIs.
+---
 
-SQLite: A C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
+## 🌟 Features
 
-Local-First: All data is stored and managed on your local machine.
+- **📝 Journaling**: Daily entries with markdown support
+- **✅ Task Management**: Create, organize, and track tasks efficiently
+- **🔒 Privacy-First**: All data stored locally by default
+- **⚡ Lightweight**: Minimal resource footprint (target: under 150 MB)
+- **🌐 Offline-Capable**: Full functionality without internet connection
+- **🔄 Optional Sync**: Cloud sync capabilities when needed
+- **🎨 Clean UI**: Intuitive, distraction-free interface
 
-Pydantic: Used for data validation and settings management.
+---
 
-🚀 Getting Started
+## 🏗️ Architecture
 
-Follow these instructions to get the backend server up and running on your local machine for development and testing.
+ṚtaFlow is built using a modern, modular tech stack:
 
-Prerequisites
+### Backend
+- **FastAPI**: High-performance Python web framework
+- **SQLite**: Lightweight, serverless database
+- **Python 3.11+**: Modern Python features and performance
 
-Python 3.8+
+### Frontend *(Planned)*
+- **React**: Component-based UI library
+- **Zustand**: Lightweight state management
+- **Vite**: Next-generation frontend tooling
 
-pip (Python package installer)
+### Desktop Wrapper *(Planned)*
+- **Tauri**: Rust-based desktop application framework
+- Provides native performance with web technologies
 
-1. Set Up a Virtual Environment
+---
 
-It's highly recommended to use a virtual environment to manage project dependencies.
+## 📂 Project Structure
 
-# Navigate to the backend directory
-cd backend
-
-# Create a virtual environment
-python -m venv venv
-
-# Activate the virtual environment
-# On macOS/Linux:
-source venv/bin/activate
-# On Windows:
-.\venv\Scripts\activate
-
-
-2. Install Dependencies
-
-Install all the required Python packages from requirements.txt.
-
-# Ensure your virtual environment is activated
-pip install -r requirements.txt
-
-
-(Note: If a requirements.txt file is not present, you may need to manually install fastapi, uvicorn, and sqlalchemy.)
-
-3. Run the Server
-
-The server is run using uvicorn, an ASGI server.
-
-# Run the server
-# Replace 'main:app' with the correct path to your FastAPI app instance
-# (e.g., 'app.main:app' if your main file is 'app/main.py')
-uvicorn main:app --reload
-
-
-main:app refers to the app object in the main.py file.
-
---reload enables auto-reload, so the server restarts after code changes.
-
-The server will be running at http://127.0.0.1:8000.
-
-📚 API Documentation
-
-Once the server is running, you can access the interactive API documentation provided by FastAPI:
-
-Swagger UI: http://127.0.0.1:8000/docs
-
-ReDoc: http://127.0.0.1:8000/redoc
-
-🗄️ Database
-
-This backend uses SQLite for its database.
-
-The database file (e.g., rtaflow.db) will be created in the root of the backend directory when the server is first run.
-
-Database models and schema are likely managed using SQLAlchemy (a common companion to FastAPI).
-
-⚙️ Project Structure (Assumed)
-
-A typical FastAPI project structure might look like this:
-
-backend/
-├── venv/                     # Virtual environment
-├── app/                      # Main application module
-│   ├── __init__.py
-│   ├── main.py               # FastAPI app instance
-│   ├── dependencies.py       # Dependency injection
-│   ├── models.py             # SQLAlchemy models
-│   ├── schemas.py            # Pydantic schemas
-│   └── routers/              # API endpoint routers
-│       ├── __init__.py
-│       └── entries.py
-├── tests/                    # Unit and integration tests
+```
+RtaFlow/
+├── backend/              # FastAPI backend server
+│   ├── app/             # Application code
+│   ├── tests/           # Backend tests
+│   └── requirements.txt # Python dependencies
+├── scripts/             # Development and deployment scripts
+├── pytest.ini          # Pytest configuration
+├── test_db.sqlite      # Test database
 ├── .gitignore
-├── requirements.txt          # Project dependencies
-└── README.md                 # This file
+├── LICENSE
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.11 or higher
+- pip (Python package manager)
+- Git
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/akshat1903kk/RtaFlow.git
+   cd RtaFlow
+   ```
+
+2. **Set up the backend**
+   ```bash
+   cd backend
+   pip install -r requirements.txt
+   ```
+
+3. **Run the development server**
+   ```bash
+   cd backend
+   uvicorn app.main:app --reload
+   ```
+
+   The API will be available at `http://localhost:8000`
+
+4. **Access API documentation**
+   - Swagger UI: `http://localhost:8000/docs`
+   - ReDoc: `http://localhost:8000/redoc`
+
+### Quick Start Script *(Coming Soon)*
+```bash
+./scripts/run_dev.sh
+```
+
+---
+
+## 🧪 Testing
+
+Run the test suite:
+
+```bash
+pytest
+```
+
+Run tests with coverage:
+
+```bash
+pytest --cov=backend/app
+```
+
+---
+
+## 🗺️ Roadmap
+
+### Phase 1: Core Backend (Current)
+- [x] FastAPI server setup
+- [x] SQLite database integration
+- [x] Basic project structure
+- [ ] User authentication
+- [ ] Journal entry CRUD operations
+- [ ] Task management endpoints
+- [ ] API documentation
+
+### Phase 2: Frontend Development
+- [ ] React application setup
+- [ ] Zustand state management
+- [ ] Journal entry interface
+- [ ] Task management UI
+- [ ] Responsive design
+- [ ] Dark mode support
+
+### Phase 3: Desktop Application
+- [ ] Tauri integration
+- [ ] Native desktop features
+- [ ] System tray integration
+- [ ] Local file system access
+- [ ] Cross-platform build system
+
+### Phase 4: Advanced Features
+- [ ] Data encryption
+- [ ] Cloud sync (optional)
+- [ ] Export/import functionality
+- [ ] Tags and categories
+- [ ] Search functionality
+- [ ] Custom themes
+- [ ] Plugin system
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow PEP 8 for Python code
+- Write tests for new features
+- Update documentation as needed
+- Keep commits atomic and descriptive
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- Inspired by the concept of **Ṛta** (ऋत) - the Vedic principle of natural order and rhythm
+- Built with modern open-source technologies
+- Community-driven development
+
+---
+
+## 📬 Contact
+
+**Akshat** - [@akshat1903kk](https://github.com/akshat1903kk)
+
+Project Link: [https://github.com/akshat1903kk/RtaFlow](https://github.com/akshat1903kk/RtaFlow)
+
+---
+
+## ⭐ Star History
+
+If you find ṚtaFlow useful, please consider giving it a star! It helps the project grow and motivates continued development.
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ for productivity and mindfulness</sub>
+</div>
