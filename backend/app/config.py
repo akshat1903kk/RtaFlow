@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = f"sqlite:///{BASE_DIR / 'data' / DB_NAME}"
 
     # Security
-    SECRET_KEY: str = "change_me_later"
+    SECRET_KEY: str = "8AB7F5E3393B9A12E0F46309EC1B839E1E74677B507E50AB23C7223BB16AFD38"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     ALGORITHM: str = "HS256"  # ← added this (your auth.py was using settings.algo)
 

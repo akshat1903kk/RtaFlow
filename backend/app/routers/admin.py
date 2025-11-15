@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from backend.app import models
-
+from .. import models
 from ..database import db_dependency
 from ..utils.depndencies import require_admin
 

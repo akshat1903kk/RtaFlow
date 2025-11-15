@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from .. import models, schemas
 from ..database import db_dependency
+from ..utils.depndencies import user_dependency
 
 router = APIRouter(
     prefix="/api/v1/tasks",
@@ -12,14 +13,14 @@ router = APIRouter(
 # Dependencies
 # =====================================================
 #
-# this has been shifted to database.py
+# this has been shifted to database.py and ṚtaFlow\backend\app\utils\depndencies.py
 #
 # =====================================================
 # TASK OPERATIONS
 # =====================================================
 
 
-@router.get("/", response_model=list[schemas.Task])
+@router.get("/", response_model=list[schemas.Task], dependencies=[user_dependency])
 def get_tasks(db: db_dependency):
     """Fetch all tasks."""
     data = db.query(models.Task).all()
@@ -28,7 +29,9 @@ def get_tasks(db: db_dependency):
     return data
 
 
-@router.post("/", response_model=schemas.Task, status_code=201)
+@router.post(
+    "/", response_model=schemas.Task, status_code=201, dependencies=[user_dependency]
+)
 def create_task(model: schemas.TaskCreate, db: db_dependency):
     """Create a new task."""
     new_task = models.Task(**model.model_dump())
@@ -38,7 +41,7 @@ def create_task(model: schemas.TaskCreate, db: db_dependency):
     return new_task
 
 
-@router.get("/{task_id}", response_model=schemas.Task)
+@router.get("/{task_id}", response_model=schemas.Task, dependencies=[user_dependency])
 def fetch_task(task_id: int, db: db_dependency):
     """Fetch a single task by ID."""
     task = db.query(models.Task).filter(models.Task.id == task_id).first()
@@ -47,7 +50,7 @@ def fetch_task(task_id: int, db: db_dependency):
     return task
 
 
-@router.put("/{task_id}", response_model=schemas.Task)
+@router.put("/{task_id}", response_model=schemas.Task, dependencies=[user_dependency])
 def update_task(task_id: int, model: schemas.TaskUpdate, db: db_dependency):
     """Update a task by ID."""
     task = db.query(models.Task).filter(models.Task.id == task_id).first()
@@ -63,7 +66,7 @@ def update_task(task_id: int, model: schemas.TaskUpdate, db: db_dependency):
     return task
 
 
-@router.delete("/{task_id}", status_code=204)
+@router.delete("/{task_id}", status_code=204, dependencies=[user_dependency])
 def delete_task(task_id: int, db: db_dependency):
     """Delete a task by ID."""
     task = db.query(models.Task).filter(models.Task.id == task_id).first()

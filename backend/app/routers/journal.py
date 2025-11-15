@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from .. import models, schemas
 from ..database import db_dependency
+from ..utils.depndencies import user_dependency
 
 router = APIRouter(
     prefix="/api/v1/journal",
@@ -19,7 +20,9 @@ router = APIRouter(
 # ===============================================================
 
 
-@router.get("/", response_model=list[schemas.JournalEntry])
+@router.get(
+    "/", response_model=list[schemas.JournalEntry], dependencies=[user_dependency]
+)
 def get_all_entries(db: db_dependency):
     """Fetch all journal entries."""
     entries = db.query(models.JournalEntry).all()
@@ -28,7 +31,9 @@ def get_all_entries(db: db_dependency):
     return entries
 
 
-@router.get("/{entry_id}", response_model=schemas.JournalEntry)
+@router.get(
+    "/{entry_id}", response_model=schemas.JournalEntry, dependencies=[user_dependency]
+)
 def get_single_entry(entry_id: int, db: db_dependency):
     """Fetch a single journal entry by ID."""
     entry = (
@@ -39,7 +44,12 @@ def get_single_entry(entry_id: int, db: db_dependency):
     return entry
 
 
-@router.post("/", response_model=schemas.JournalEntry, status_code=201)
+@router.post(
+    "/",
+    response_model=schemas.JournalEntry,
+    status_code=201,
+    dependencies=[user_dependency],
+)
 def create_entry(entry: schemas.JournalCreate, db: db_dependency):
     """Create a new journal entry."""
     new_entry = models.JournalEntry(**entry.model_dump())
@@ -49,7 +59,9 @@ def create_entry(entry: schemas.JournalCreate, db: db_dependency):
     return new_entry
 
 
-@router.put("/{entry_id}", response_model=schemas.JournalEntry)
+@router.put(
+    "/{entry_id}", response_model=schemas.JournalEntry, dependencies=[user_dependency]
+)
 def update_entry(entry_id: int, entry_update: schemas.JournalUpdate, db: db_dependency):
     """Update an existing journal entry."""
     entry = (
@@ -67,7 +79,7 @@ def update_entry(entry_id: int, entry_update: schemas.JournalUpdate, db: db_depe
     return entry
 
 
-@router.delete("/{entry_id}", status_code=204)
+@router.delete("/{entry_id}", status_code=204, dependencies=[user_dependency])
 def delete_entry(entry_id: int, db: db_dependency):
     """Delete a journal entry."""
     entry = (

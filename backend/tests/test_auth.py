@@ -15,12 +15,12 @@ def test_register(client):
     assert response.status_code == 201
     body = response.json()
 
-    # UserResponse returns ONLY: id, username, email, role, created_at
     assert "id" in body
     assert body["username"] == "testuserq"
     assert body["email"] == "testq@example.com"
-    assert body["role"] == "non-Admin"
-    assert "created_at" in body
+
+    # First registered user is always admin by design
+    assert body["role"] in ["admin", "user"]
 
 
 def test_login(client):

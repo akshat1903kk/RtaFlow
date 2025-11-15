@@ -33,6 +33,11 @@ class RoleUpdate(BaseModel):
     new_role: str
 
 
+class UserUpdate(BaseModel):
+    role: str
+    password: str
+
+
 # =====================================================
 #  TASK SCHEMAS
 # =====================================================
