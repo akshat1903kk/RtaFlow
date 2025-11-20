@@ -1,22 +1,70 @@
 # Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 venv/
+env/
+ENV/
 .env
+*.egg-info/
+.eggs/
+*.egg
 
-# Node / React (if frontend exists)
+# Python testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+
+# Python type checking & linting
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.pytype/
+.pyre/
+
+# Node / React
 node_modules/
 dist/
 build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm
+.yarn
+.pnpm-store
+.eslintcache
+
+# Tauri
+src-tauri/target/
+src-tauri/WixTools/
 
 # OS / IDE
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
 # Local DB + Logs
 data/
 *.db
+*.sqlite
+*.sqlite3
+*.db-journal
 logs/
 *.log
+
+# Environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
